@@ -1,0 +1,161 @@
+/* ---------- basics & variables ---------- */
+* { box-sizing: border-box; }
+:root{
+  --sidebar-width: 300px;
+  --bg: #f4f7fd;
+  --surface: #ffffff;
+  --text: #000000;
+  --muted: #828fa3;
+  --accent:#635fc7;
+  --shadow: 0px 4px 6px rgba(54,78,126,0.1015);
+}
+
+/* dark theme */
+[data-theme="dark"]{
+  --bg: #0f1720;
+  --surface: #111827;
+  --text: #f5f7fb;
+  --muted: #9aa4b2;
+  --accent: #7c6cff;
+  --shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+body{
+  font-family: "Plus Jakarta Sans", sans-serif;
+  margin:0;
+  display:flex;
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-size:16px;
+}
+
+/* sidebar */
+.side-bar{
+  width:var(--sidebar-width);
+  background:var(--surface);
+  border-right:1px solid rgba(226,231,255,0.6);
+  padding-bottom:40px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+#side-logo-div { padding: 32px 24px; }
+#logo { width:100%; max-width:180px; }
+
+/* boards area */
+.boards-nav-links-div { padding: 0 18px; }
+.board-btn{
+  display:block;
+  background:var(--accent);
+  color:white;
+  border:none;
+  padding:12px 18px;
+  border-radius:100px 100px 100px 100px;
+  cursor:pointer;
+  font-weight:700;
+  margin-top:12px;
+}
+
+/* sidebar controls */
+.sidebar-controls { margin-top:28px; padding:0 18px; display:flex; flex-direction:column; gap:12px; }
+.theme-row { display:flex; align-items:center; gap:10px; }
+.theme-label { font-size:0.9rem; color:var(--muted); }
+.secondary-btn { background:transparent; border:1px solid rgba(0,0,0,0.08); padding:8px; border-radius:8px; cursor:pointer; }
+
+/* mobile menu button */
+.mobile-menu-btn{
+  display:none;
+  position:fixed;
+  top:12px;
+  left:12px;
+  z-index:1200;
+  background:var(--surface);
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  box-shadow:var(--shadow);
+}
+
+/* layout header */
+#layout{flex:1; overflow-x:hidden;}
+header{
+  display:flex; align-items:center; justify-content:space-between; padding:22px 28px;
+  background:var(--surface); border-bottom:1px solid rgba(226,231,255,0.6);
+}
+.header-name-div { display:flex; align-items:center; gap:12px; }
+.logo-mobile{ display:none; width:28px; height:28px; }
+.primary-btn{ background:var(--accent); color:white; border:none; padding:10px 18px; border-radius:100px; cursor:pointer; }
+
+/* board columns */
+.container{ padding:20px 28px; }
+.card-column-main{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 304px));
+  gap:16px;
+}
+.column-div{ display:flex; flex-direction:column; gap:12px; }
+.column-head-div{ display:flex; align-items:center; gap:10px; }
+.columnHeader{ color:var(--muted); font-size:0.85rem; letter-spacing:0.08rem; margin:0; }
+.dot{ height:14px; width:14px; border-radius:50%; display:inline-block; }
+#todo-dot{ background:#49c4e5; } #doing-dot{ background:#8471f2; } #done-dot{ background:#219c90; }
+
+/* tasks */
+.tasks-container{ display:flex; flex-direction:column; gap:12px; }
+.task-div{
+  background:var(--surface); color:var(--text); padding:12px 16px; border-radius:12px;
+  box-shadow:var(--shadow); cursor:pointer; font-weight:700;
+}
+
+/* status area */
+.status-area { padding:12px 28px; min-height:28px; color:var(--muted); }
+
+/* modal styles - reuse your prior sizing but adapt for variables */
+dialog{ position:fixed; border:none; padding:0; background:none; }
+#task-modal::backdrop{ background: rgba(0,0,0,0.4); }
+#task-modal{
+  top:45%; left:50%; transform:translate(-50%,-45%);
+  width:480px; max-width:94vw; padding:20px; background:var(--surface); color:var(--text); border-radius:8px; box-shadow:var(--shadow);
+}
+.modal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.close-btn{ background:none; border:none; font-size:28px; color:#EA5555; cursor:pointer; }
+
+/* form inputs */
+form label{ display:block; font-weight:700; font-size:0.8rem; margin-top:12px; color:var(--muted); }
+form input, form textarea, form select{ width:100%; padding:8px 10px; border-radius:6px; border:1px solid #d1d6ee; background:transparent; color:var(--text); }
+.task-btns{ display:flex; gap:12px; margin-top:18px; }
+.save-changes-btn{ background:var(--accent); color:white; border:none; padding:12px 18px; border-radius:100px; cursor:pointer; }
+.delete-task-btn{ background:#ea5555; color:white; border:none; padding:12px 18px; border-radius:100px; cursor:pointer; }
+
+/* new task overlay */
+.modal-overlay{ position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:1200; }
+#new-task-overlay[hidden]{ display:none; }
+#new-task-modal{ width:480px; max-width:94vw; padding:20px; background:var(--surface); color:var(--text); border-radius:8px; box-shadow:var(--shadow); }
+.new-close-btn{ background:none; border:none; font-size:28px; color:#EA5555; cursor:pointer; }
+
+/* backdrop */
+#custom-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,0.4); display:none; z-index:1100; }
+#custom-backdrop[hidden]{ display:none; }
+
+/* theme switch styling */
+.theme-switch{ position:relative; display:inline-block; width:44px; height:22px; }
+.theme-switch input{ display:none; }
+.slider{ position:absolute; inset:0; background:#cbd5e1; border-radius:999px; transition:0.25s; }
+.slider:before{ content:""; position:absolute; left:3px; top:3px; width:16px; height:16px; background:white; border-radius:50%; transition:0.25s; }
+.theme-switch input:checked + .slider{ background: var(--accent); }
+.theme-switch input:checked + .slider:before{ transform: translateX(22px); }
+
+/* responsive */
+@media (max-width:1024px){
+  .side-bar{ display:none; position:fixed; z-index:1300; left:0; top:0; bottom:0; }
+  .mobile-menu-btn{ display:block; }
+  .logo-mobile{ display:block; }
+  .card-column-main{ grid-template-columns: repeat(2, minmax(0, 360px)); }
+  header{ padding:12px 16px; height:64px; }
+}
+@media (max-width:576px){
+  .card-column-main{ grid-template-columns: minmax(0, 380px); }
+  #add-task-btn span{ display:none; }
+  #add-task-btn{ width:36px; height:36px; border-radius:50%; }
+  #task-modal{ width:343px; height:auto; }
+}
