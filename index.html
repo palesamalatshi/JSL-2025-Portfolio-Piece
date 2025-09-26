@@ -1,177 +1,173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Kanban — Launch Career</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon.svg"
+    />
+    <script defer src="./scripts.js"></script>
+    <title>Kanban Task Management</title>
+  </head>
 
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- APP LAYOUT -->
-  <div id="app" class="light">
-
-    <!-- Sidebar -->
-    <aside id="sidebar" class="sidebar">
-      <div class="sidebar-top">
-        <img id="logo" src="./assets/logo-light.svg" alt="kanban logo" class="logo" />
+  <body>
+    <nav class="side-bar" id="side-bar-div">
+      <div id="side-logo-div">
+        <img id="logo" src="./assets/logo-light.svg" alt="logo-light" />
       </div>
-
-      <div class="boards-section">
-        <h4 class="boards-title">ALL BOARDS (1)</h4>
-        <button class="board-btn" id="board-launch">Launch Career</button>
+      <div class="boards-nav-links-div" id="boards-nav-links-div">
+        <h4 id="headline-sidepanel">ALL BOARDS (1)</h4>
+        <button class="board-btn">Launch Career</button>
       </div>
+      <div class="theme-toggle-container">
+        <span class="theme-icon">🌞</span>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle" />
+          <span class="slider round"></span>
+        </label>
+        <span class="theme-icon">🌚</span>
+      </div>
+      <button id="hide-sidebar-btn" class="board-btn" style="margin-top: auto;">
+        Hide Sidebar 🚫
+      </button>
+    </nav>
 
-      <div class="sidebar-bottom">
-        <div class="theme-toggle" id="theme-toggle">
-          <span id="sun">🌞</span>
-          <div class="toggle-track" id="theme-track">
-            <div class="toggle-thumb" id="theme-thumb"></div>
-          </div>
-          <span id="moon">🌚</span>
+    <div id="layout">
+      <header id="header" class="sticky-header">
+        <div class="header-name-div">
+          <img
+            src="./assets/favicon.svg"
+            alt="logo-mobile"
+            class="logo-mobile"
+            id="mobile-menu-logo"
+          />
+          <h2 class="header-board-name" id="header-board-name">
+            Launch Career
+          </h2>
         </div>
-
-        <button id="hide-sidebar" class="hide-btn">
-          <span class="hide-emoji">🚫</span>
-          <span class="hide-text">Hide Sidebar</span>
+        <button id="add-new-task-btn" class="primary-btn">
+          + Add New Task
         </button>
-      </div>
-    </aside>
-
-    <!-- vertical divider -->
-    <div class="divider"></div>
-
-    <!-- Main content -->
-    <div id="layout" class="layout">
-      <!-- header -->
-      <header id="header" class="header">
-        <div class="header-left">
-          <img src="./assets/favicon.svg" alt="logo-mobile" class="logo-mobile" id="logo-mobile" />
-          <h2 id="board-name">Launch Career</h2>
-        </div>
-
-        <div class="header-right">
-          <!-- mobile + (circle) — only visible on mobile -->
-          <button id="mobile-add" class="mobile-add" aria-label="Add task (mobile)">+</button>
-
-          <!-- desktop add button -->
-          <button id="add-btn" class="add-btn">+ Add New Task</button>
-        </div>
       </header>
 
-      <div class="header-divider"></div>
-
-      <!-- board area -->
-      <section class="board-area">
-        <div id="loading" class="loading">Loading tasks…</div>
-        <div id="fetch-error" class="fetch-error hidden">Failed to load tasks. Showing saved tasks.</div>
-
-        <main class="columns" id="columns">
-
-          <!-- TODO column -->
-          <section class="column" data-status="todo">
-            <div class="column-head">
-              <span class="dot dot-todo"></span>
-              <h4 class="col-title">TODO (<span id="todo-count">0</span>)</h4>
+      <div class="container">
+        <main class="card-column-main">
+          <div class="column-div" data-status="todo">
+            <div id="todo-head-div" class="column-head-div">
+              <span class="dot" id="todo-dot"></span>
+              <h4 id="toDoText" class="columnHeader">TODO (0)</h4>
             </div>
-            <div class="tasks" id="todo-tasks"></div>
-          </section>
-
-          <!-- DOING -->
-          <section class="column" data-status="doing">
-            <div class="column-head">
-              <span class="dot dot-doing"></span>
-              <h4 class="col-title">DOING (<span id="doing-count">0</span>)</h4>
+            <div class="tasks-container"></div>
+          </div>
+          <div class="column-div" data-status="doing">
+            <div id="doing-head-div" class="column-head-div">
+              <span class="dot" id="doing-dot"></span>
+              <h4 id="doingText" class="columnHeader">DOING (0)</h4>
             </div>
-            <div class="tasks" id="doing-tasks"></div>
-          </section>
-
-          <!-- DONE -->
-          <section class="column" data-status="done">
-            <div class="column-head">
-              <span class="dot dot-done"></span>
-              <h4 class="col-title">DONE (<span id="done-count">0</span>)</h4>
+            <div class="tasks-container"></div>
+          </div>
+          <div class="column-div" data-status="done">
+            <div id="done-head-div" class="column-head-div">
+              <span class="dot" id="done-dot"></span>
+              <h4 id="doneText" class="columnHeader">DONE (0)</h4>
             </div>
-            <div class="tasks" id="done-tasks"></div>
-          </section>
-
+            <div class="tasks-container"></div>
+          </div>
         </main>
-      </section>
-    </div>
-
-    <!-- Add/Edit Modal & overlay -->
-    <div id="overlay" class="overlay hidden"></div>
-
-    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
-      <div class="modal-inner" id="modal-inner">
-        <button id="modal-close" class="modal-close">✕</button>
-        <h3 id="modal-heading">Add New Task</h3>
-
-        <form id="task-form" autocomplete="off">
-          <input type="hidden" id="task-id" />
-
-          <label class="label">Title</label>
-          <input id="task-title" class="input" placeholder="e.g. Take a chilled break" />
-
-          <div id="title-error" class="validation hidden">!Please fill out this field</div>
-
-          <label class="label">Description</label>
-          <textarea id="task-desc" class="textarea" placeholder="e.g. Pet your dog, have a cup of coffee..."></textarea>
-
-          <div id="desc-error" class="validation hidden">!Please fill out this field</div>
-
-          <label class="label">Status</label>
-          <div class="select-wrapper">
-            <select id="task-status" class="select">
-              <option value="todo">TODO</option>
-              <option value="doing">DOING</option>
-              <option value="done">DONE</option>
-            </select>
-            <div class="select-arrow">▾</div>
-          </div>
-
-          <label class="label">Priority</label>
-          <div class="select-wrapper">
-            <select id="task-priority" class="select">
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-            <div class="select-arrow">▾</div>
-          </div>
-
-          <div class="modal-actions">
-            <button id="delete-btn" type="button" class="btn-delete hidden">Delete Task</button>
-            <button id="save-btn" type="submit" class="btn-primary">Create Task</button>
-          </div>
-        </form>
       </div>
     </div>
 
-    <!-- mobile menu -->
-    <div id="mobile-menu" class="mobile-menu hidden">
-      <button id="mobile-menu-close" class="mobile-menu-close">✕</button>
-      <div class="mobile-boards">
-        <h4>ALL BOARDS (1)</h4>
-        <button class="board-btn" id="mobile-board-launch">Launch Career</button>
-      </div>
-      <div class="mobile-theme">
-        <div class="theme-toggle">
-          <span>🌞</span>
-          <div class="toggle-track" id="mobile-theme-track">
-            <div class="toggle-thumb" id="mobile-theme-thumb"></div>
-          </div>
-          <span>🌚</span>
+    <!-- Add New Task Modal -->
+    <dialog id="new-task-modal" class="modal-overlay">
+      <form class="modal-window" id="new-task-form">
+        <div class="modal-header">
+          <h3>Add New Task</h3>
+          <button type="button" class="close-btn" id="close-new-task-btn">
+            &times;
+          </button>
         </div>
-      </div>
-    </div>
 
-  </div>
+        <label for="new-task-title">Title</label>
+        <input
+          type="text"
+          id="new-task-title"
+          placeholder="e.g. Take a little break"
+          required
+        />
 
-  <script src="script.js"></script>
-</body>
+        <label for="new-task-desc">Description</label>
+        <textarea
+          id="new-task-desc"
+          rows="4"
+          placeholder="e.g. Pet your dog, have a cup of coffee, dance to your favourite song and come back to conquer this challenge. 💪🏾"
+          required
+        ></textarea>
+
+        <label for="new-task-status">Status</label>
+        <select id="new-task-status" required>
+          <option value="todo">todo</option>
+          <option value="doing">doing</option>
+          <option value="done">done</option>
+        </select>
+
+        <label for="new-task-priority">Priority</label>
+        <select id="new-task-priority" required>
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <button type="submit" class="submit-btn">Create Task</button>
+      </form>
+    </dialog>
+
+    <!-- Edit Task Modal -->
+    <dialog id="edit-task-modal" class="modal-overlay">
+      <form class="modal-window" id="edit-task-form">
+        <div class="modal-header">
+          <h3>Edit Task</h3>
+          <button type="button" class="close-btn" id="close-edit-task-btn">
+            &times;
+          </button>
+        </div>
+
+        <label for="edit-task-title">Title</label>
+        <input type="text" id="edit-task-title" required />
+
+        <label for="edit-task-desc">Description</label>
+        <textarea id="edit-task-desc" rows="4" required></textarea>
+
+        <label for="edit-task-status">Status</label>
+        <select id="edit-task-status" required>
+          <option value="todo">todo</option>
+          <option value="doing">doing</option>
+          <option value="done">done</option>
+        </select>
+
+        <label for="edit-task-priority">Priority</label>
+        <select id="edit-task-priority" required>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <div class="button-group">
+          <button type="submit" class="submit-btn" id="save-task-btn">
+            Save Changes
+          </button>
+          <button type="button" class="delete-btn" id="delete-task-btn">
+            Delete Task
+          </button>
+        </div>
+      </form>
+    </dialog>
+  </body>
 </html>
