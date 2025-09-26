@@ -1,198 +1,177 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap"
-      rel="stylesheet"
-    />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kanban — Launch Career</title>
 
-    <link rel="stylesheet" href="./styles.css" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="./assets/favicon.svg"
-    />
-    <script defer src="./main.js" type="module"></script>
-    <title>Kanban Task Management</title>
-  </head>
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <body>
-    <nav class="side-bar" id="side-bar-div">
-      <div id="side-logo-div">
-        <img id="logo" src="./assets/logo-light.svg" alt="kanban logo" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- APP LAYOUT -->
+  <div id="app" class="light">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-top">
+        <img id="logo" src="./assets/logo-light.svg" alt="kanban logo" class="logo" />
       </div>
 
-      <div class="boards-nav-links-div" id="boards-nav-links-div">
-        <h4 id="headline-sidepanel">ALL BOARDS (1)</h4>
-        <button class="board-btn active">Launch Career</button>
+      <div class="boards-section">
+        <h4 class="boards-title">ALL BOARDS (1)</h4>
+        <button class="board-btn" id="board-launch">Launch Career</button>
       </div>
 
-      <div class="theme-toggle-container">
-        <div class="theme-toggle-box">
+      <div class="sidebar-bottom">
+        <div class="theme-toggle" id="theme-toggle">
+          <span id="sun">🌞</span>
+          <div class="toggle-track" id="theme-track">
+            <div class="toggle-thumb" id="theme-thumb"></div>
+          </div>
+          <span id="moon">🌚</span>
+        </div>
+
+        <button id="hide-sidebar" class="hide-btn">
+          <span class="hide-emoji">🚫</span>
+          <span class="hide-text">Hide Sidebar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- vertical divider -->
+    <div class="divider"></div>
+
+    <!-- Main content -->
+    <div id="layout" class="layout">
+      <!-- header -->
+      <header id="header" class="header">
+        <div class="header-left">
+          <img src="./assets/favicon.svg" alt="logo-mobile" class="logo-mobile" id="logo-mobile" />
+          <h2 id="board-name">Launch Career</h2>
+        </div>
+
+        <div class="header-right">
+          <!-- mobile + (circle) — only visible on mobile -->
+          <button id="mobile-add" class="mobile-add" aria-label="Add task (mobile)">+</button>
+
+          <!-- desktop add button -->
+          <button id="add-btn" class="add-btn">+ Add New Task</button>
+        </div>
+      </header>
+
+      <div class="header-divider"></div>
+
+      <!-- board area -->
+      <section class="board-area">
+        <div id="loading" class="loading">Loading tasks…</div>
+        <div id="fetch-error" class="fetch-error hidden">Failed to load tasks. Showing saved tasks.</div>
+
+        <main class="columns" id="columns">
+
+          <!-- TODO column -->
+          <section class="column" data-status="todo">
+            <div class="column-head">
+              <span class="dot dot-todo"></span>
+              <h4 class="col-title">TODO (<span id="todo-count">0</span>)</h4>
+            </div>
+            <div class="tasks" id="todo-tasks"></div>
+          </section>
+
+          <!-- DOING -->
+          <section class="column" data-status="doing">
+            <div class="column-head">
+              <span class="dot dot-doing"></span>
+              <h4 class="col-title">DOING (<span id="doing-count">0</span>)</h4>
+            </div>
+            <div class="tasks" id="doing-tasks"></div>
+          </section>
+
+          <!-- DONE -->
+          <section class="column" data-status="done">
+            <div class="column-head">
+              <span class="dot dot-done"></span>
+              <h4 class="col-title">DONE (<span id="done-count">0</span>)</h4>
+            </div>
+            <div class="tasks" id="done-tasks"></div>
+          </section>
+
+        </main>
+      </section>
+    </div>
+
+    <!-- Add/Edit Modal & overlay -->
+    <div id="overlay" class="overlay hidden"></div>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="modal-inner" id="modal-inner">
+        <button id="modal-close" class="modal-close">✕</button>
+        <h3 id="modal-heading">Add New Task</h3>
+
+        <form id="task-form" autocomplete="off">
+          <input type="hidden" id="task-id" />
+
+          <label class="label">Title</label>
+          <input id="task-title" class="input" placeholder="e.g. Take a chilled break" />
+
+          <div id="title-error" class="validation hidden">!Please fill out this field</div>
+
+          <label class="label">Description</label>
+          <textarea id="task-desc" class="textarea" placeholder="e.g. Pet your dog, have a cup of coffee..."></textarea>
+
+          <div id="desc-error" class="validation hidden">!Please fill out this field</div>
+
+          <label class="label">Status</label>
+          <div class="select-wrapper">
+            <select id="task-status" class="select">
+              <option value="todo">TODO</option>
+              <option value="doing">DOING</option>
+              <option value="done">DONE</option>
+            </select>
+            <div class="select-arrow">▾</div>
+          </div>
+
+          <label class="label">Priority</label>
+          <div class="select-wrapper">
+            <select id="task-priority" class="select">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+            <div class="select-arrow">▾</div>
+          </div>
+
+          <div class="modal-actions">
+            <button id="delete-btn" type="button" class="btn-delete hidden">Delete Task</button>
+            <button id="save-btn" type="submit" class="btn-primary">Create Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- mobile menu -->
+    <div id="mobile-menu" class="mobile-menu hidden">
+      <button id="mobile-menu-close" class="mobile-menu-close">✕</button>
+      <div class="mobile-boards">
+        <h4>ALL BOARDS (1)</h4>
+        <button class="board-btn" id="mobile-board-launch">Launch Career</button>
+      </div>
+      <div class="mobile-theme">
+        <div class="theme-toggle">
           <span>🌞</span>
-          <div class="toggle-switch" id="theme-toggle-switch">
-            <div class="toggle-slider"></div>
+          <div class="toggle-track" id="mobile-theme-track">
+            <div class="toggle-thumb" id="mobile-theme-thumb"></div>
           </div>
           <span>🌚</span>
         </div>
       </div>
-      
-      <button class="hide-sidebar-btn" id="hide-sidebar-btn">
-        🚫 Hide Sidebar
-      </button>
-    </nav>
-
-    <div id="layout">
-      <header id="header" class="sticky-header">
-        <div class="header-name-div">
-          <img
-            src="./assets/favicon.svg"
-            alt="logo-mobile"
-            class="logo-mobile"
-            id="mobile-menu-toggle-btn" 
-          />
-          <h2 class="header-board-name" id="header-board-name">
-            Launch Career
-          </h2>
-        </div>
-        <button id="add-task-btn">
-            +<span> Add New Task</span>
-        </button>
-      </header>
-
-      <div class="container">
-        <main class="card-column-main">
-          <div class="column-div" data-status="todo">
-            <div id="todo-head-div" class="column-head-div">
-              <span class="dot" id="todo-dot"></span>
-              <h4 id="toDoText" class="columnHeader">TODO (0)</h4>
-            </div>
-            <div class="tasks-container"></div>
-          </div>
-          <div class="column-div" data-status="doing">
-            <div id="doing-head-div" class="column-head-div">
-              <span class="dot" id="doing-dot"></span>
-              <h4 id="doingText" class="columnHeader">DOING (0)</h4>
-            </div>
-            <div class="tasks-container"></div>
-          </div>
-          <div class="column-div" data-status="done">
-            <div id="done-head-div" class="column-head-div">
-              <span class="dot" id="done-dot"></span>
-              <h4 id="doneText" class="columnHeader">DONE (0)</h4>
-            </div>
-            <div class="tasks-container"></div>
-          </div>
-        </main>
-      </div>
-      
-      <button class="show-sidebar-btn" id="show-sidebar-btn">
-        👀
-      </button>
     </div>
 
-    <dialog id="task-modal">
-      <form method="dialog" id="task-form">
-        <div class="modal-header">
-          <h3>Task Title Placeholder</h3>
-          <button type="button" class="close-btn" id="close-modal-btn">
-            &times;
-          </button>
-        </div>
+  </div>
 
-        <label for="task-title">TITLE</label>
-        <input type="text" id="task-title" name="title" required />
-
-        <label for="task-desc">DESCRIPTION</label>
-        <textarea id="task-desc" name="description" rows="4"></textarea>
-
-        <label for="task-priority">PRIORITY</label>
-        <select id="task-priority" name="priority" required>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
-
-        <label for="task-status">STATUS</label>
-        <select id="task-status" name="status" required>
-          <option value="todo">Todo</option>
-          <option value="doing">Doing</option>
-          <option value="done">Done</option>
-        </select>
-
-        <div class="task-btns">
-          <button id="save-changes-btn" class="save-changes-btn" type="button">
-            Save Changes
-          </button>
-          <button id="delete-task-btn" class="delete-task-btn" type="button">
-            Delete Task
-          </button>
-        </div>
-      </form>
-    </dialog>
-    
-    <dialog id="new-task-modal">
-      <form method="dialog" id="new-task-form">
-        <div class="new-modal-header">
-          <h3>Add New Task</h3>
-          <button type="button" class="new-close-btn" id="new-close-modal-btn">
-            &times;
-          </button>
-        </div>
-
-        <label for="new-task-title">TITLE</label>
-        <input type="text" id="new-task-title" name="title" required placeholder="e.g. Take chilled break"/>
-
-        <label for="new-task-desc">DESCRIPTION</label>
-        <textarea id="new-task-desc" name="description" rows="4" placeholder="e.g. Pet your dog, have a cup of coffee..."></textarea>
-        
-        <label for="new-task-priority">PRIORITY</label>
-        <select id="new-task-priority" name="priority" required>
-          <option value="low">Low</option>
-          <option value="medium" selected>Medium</option>
-          <option value="high">High</option>
-        </select>
-
-        <label for="new-task-status">STATUS</label>
-        <select id="new-task-status" name="status" required>
-          <option value="todo">Todo</option>
-          <option value="doing">Doing</option>
-          <option value="done">Done</option>
-        </select>
-
-        <div class="new-task-btns">
-          <button class="create-task-btn" type="submit">
-            Create Task
-          </button>
-        </div>
-      </form>
-    </dialog>
-    
-    <div id="custom-backdrop"></div>
-    
-    <dialog id="mobile-menu-modal" class="mobile-menu-modal">
-        <div class="mobile-menu-content">
-            <button type="button" class="mobile-close-btn" id="mobile-close-btn">
-                &times;
-            </button>
-            <h4 id="headline-mobile-menu">ALL BOARDS (3)</h4>
-            <button class="board-btn mobile-board-btn active">Launch Career</button>
-            <button class="board-btn mobile-board-btn">Marketing Plan</button>
-            <button class="board-btn mobile-board-btn">Roadmap</button>
-
-            <div class="theme-toggle-container mobile-theme-toggle">
-                <div class="theme-toggle-box">
-                    <span>🌞</span>
-                    <div class="toggle-switch" id="mobile-theme-toggle-switch">
-                        <div class="toggle-slider"></div>
-                    </div>
-                    <span>🌚</span>
-                </div>
-            </div>
-        </div>
-    </dialog>
-  </body>
+  <script src="script.js"></script>
+</body>
 </html>

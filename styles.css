@@ -1,595 +1,307 @@
 /* ========================
-   Global & Root Variables
+   Global & Root Variables
 ======================== */
 * {
-  box-sizing: border-box; 
+  box-sizing: border-box; /* Ensures padding and border are included in total element size */
 }
 
-/* Default Light Mode Variables (P2.4) */
 :root {
-  --primary-color: #ffffff;
-  --secondary-color: #f4f7fd; 
-  --primary-font-color: #000112; 
-  --secondary-font-color: #828fa3; 
-  --main-purple: #635fc7;
-  --main-red: #ea5555;
-  --primary-box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.1015);
-  --sidebar-width: 300px; 
-    
-    /* Priority Colors (Stretch Goal) */
-    --priority-high: #EA5555; /* Red */
-    --priority-medium: #FBC740; /* Orange */
-    --priority-low: #219C90; /* Green */
-}
-
-/* Dark Mode (P2.30, P2.31) */
-.theme-dark {
-  --primary-color: #2b2c37; 
-  --secondary-color: #20212c; 
-  --primary-font-color: #ffffff; 
-  --secondary-font-color: #828fa3;
-  --primary-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --primary-color: #ffffff;
+  --secondary-color: #f4f7fd;
+  --primary-font-color: #000000;
+  --secondary-font-color: #828fa3;
+  --primary-box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.1015); /* Subtle shadow for card depth */
+  --sidebar-width: 300px; /* Sidebar fixed width */
 }
 
 /* ================
-   Base Elements
+   Base Elements
 ================ */
 body {
-  font-family: "Plus Jakarta Sans", sans-serif;
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  background-color: var(--secondary-color);
-  font-size: 1rem; 
-  transition: background-color 0.3s;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  display: flex; /* Allow layout to span horizontally */
+  flex-direction: row;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--secondary-color);
+  font-size: 1rem; /* Base font size for rem scaling */
 }
 
 /* ================
-   Sidebar Layout (P2.22)
+   Sidebar Layout
 ================ */
 .side-bar {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--primary-color);
-  border-right: 1px solid #e4ebfa; 
-  width: var(--sidebar-width);
-  height: 100vh;
-  padding-bottom: 30px; 
-  transition: transform 0.3s ease-in-out;
-}
-
-/* Class added when sidebar is hidden (P2.23) */
-.sidebar-hidden .side-bar {
-  transform: translateX(-300px);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-color);
+  border-right: 1px solid #e4ebfa; /* Light divider */
+  width: var(--sidebar-width);
+  height: 100vh;
 }
 
 #side-logo-div {
-  padding: 32.78px 0 54px 34px; 
+  margin: 33px 113px 54px 34px; /* Spacing around logo */
+  display: flex;
+  justify-content: flex-start;
 }
 
 #logo {
-  width: 152.53px; 
+  width: 100%; /* Make logo responsive within container */
 }
 
 .boards-nav-links-div {
-  flex-grow: 1; 
+  display: flex;
+  flex-direction: column;
+  color: var(--primary-font-color);
 }
 
 #headline-sidepanel {
-  padding: 0 12px 0 50px;
+  padding: 0 12px 0 50px; /* Aligns section content from left and right */
 }
 
 h4 {
-  color: var(--secondary-font-color);
-  font-size: 0.75rem; /* 12px */
-  letter-spacing: 0.125rem; /* 2.4px */
+  color: var(--secondary-font-color);
+  font-size: 0.75rem;
+  letter-spacing: 0.125rem; /* Makes heading more spaced */
 }
 
 .board-btn {
-  background-color: transparent;
-  color: var(--secondary-font-color);
-  border: none;
-  border-radius: 0 100px 100px 0;
-  height: 49.7px; 
-  width: 276px;
-  padding: 0 12px 0 50px;
-  display: flex;
-  align-items: center;
-  font-size: 0.9375rem; /* 15px */
-  font-weight: bold;
-  cursor: pointer;
-}
-.board-btn.active {
-    background-color: var(--main-purple);
-    color: #fff;
-}
-
-
-/* Hide Sidebar Button (P2.23) */
-.hide-sidebar-btn {
-  background-color: transparent;
-  border: none;
-  color: var(--secondary-font-color);
-  font-size: 0.9375rem; 
-  font-weight: 700;
-  width: 276px;
-  height: 49.75px; 
-  padding-left: 50px;
-  cursor: pointer;
-  text-align: left;
-  border-radius: 0 100px 100px 0;
-}
-
-.hide-sidebar-btn:hover {
-  color: var(--main-purple);
-}
-
-/* Show Sidebar Button (P2.24) */
-.show-sidebar-btn {
-  display: none; 
-  position: fixed;
-  bottom: 32px;
-  left: 0;
-  z-index: 10;
-  width: 56px;
-  height: 48px;
-  background-color: var(--main-purple);
-  color: white;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  border-radius: 0 100px 100px 0;
-}
-
-.sidebar-hidden .show-sidebar-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ================
-   Theme Toggle (P2.28)
-================ */
-.theme-toggle-container {
-  padding: 16px;
-}
-
-.theme-toggle-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--secondary-color);
-  height: 48px; 
-  border-radius: 6px;
-  gap: 16px;
-}
-
-.theme-dark .theme-toggle-box {
-    background-color: #20212c;
-}
-
-.theme-toggle-box span {
-  color: var(--secondary-font-color);
-}
-
-.toggle-switch {
-  width: 40px; 
-  height: 20px; 
-  background-color: var(--main-purple);
-  border-radius: 12px;
-  position: relative;
-  cursor: pointer;
-}
-
-.toggle-slider {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 14px; 
-  height: 14px; 
-  background-color: var(--primary-color);
-  border-radius: 50%;
-  transition: transform 0.3s ease;
-}
-
-/* Slider position for Dark Mode */
-.theme-dark .toggle-slider {
-  transform: translateX(20px);
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between icon and text */
+  background-color: #635fc7;
+  color: #fff;
+  border: none;
+  border-radius: 0 100px 100px 0; /* Pill shape only on right side */
+  height: 48px;
+  width: 276px;
+  padding: 28px 12px 28px 50px;
+  font-size: 0.9375rem;
+  font-weight: bold;
+  cursor: pointer;
+  overflow: hidden; /* Prevents overflowed text/icons from showing */
 }
 
 /* ===============
-   Main Layout
+   Main Layout
 ================ */
 #layout {
-  flex: 1;
-  overflow-x: auto; 
-  width: 100%;
+  flex: 1; /* Fills remaining space beside sidebar */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  width: 100%;
 }
 
 /* ===============
-   Header Section
+   Header Section
 ================ */
 header {
-  background-color: var(--primary-color);
-  color: var(--primary-font-color);
-  border-bottom: 1px solid #e4ebfa; 
-  height: 96px; 
-  padding: 0 35px 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--primary-color);
+  color: var(--primary-font-color);
+  height: 96px;
+  padding: 0 35px 0 30px;
+  border-bottom: 1px solid #e4ebfa;
+  width: 100%;
+  font-size: 1.875rem;
+  font-weight: 600;
 }
 
 .header-name-div {
-    display: flex;
-    align-items: center;
-}
-
-.header-board-name {
-    font-size: 1.5rem; /* 24px */
-    font-weight: 700;
-}
-
-#add-task-btn {
-  background-color: var(--main-purple);
-  color: white;
-  width: 164px; 
-  height: 48px; 
-  font-size: 15px;
-  font-weight: 700;
-  border-radius: 24px;
-  border: none;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
 }
 
 .logo-mobile {
-    display: none;
+  display: none; /* Hidden on desktop; shown on smaller screens */
 }
 
 /* ===============
-   Board Columns
+   Board Columns
 ================ */
 .container {
-  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 35px;
+  box-sizing: border-box;
 }
 
 .card-column-main {
-  display: flex;
-  gap: 24px;
-  min-height: 80vh;
+  display: grid;
+  grid-template-columns: repeat(
+    3,
+    minmax(0, 304px)
+  ); /* 3 columns with min size */
+  gap: 8px; /* Space between columns */
 }
 
 .column-div {
-  min-width: 280px; 
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 12px;
 }
 
 .column-head-div {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between dot and column title */
 }
 
 .columnHeader {
-  font-size: 0.75rem;
-  letter-spacing: 0.125rem;
-  color: var(--secondary-font-color);
-  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.125rem;
+  color: var(--secondary-font-color);
+  margin: 0;
 }
 
 /* Status Dots */
 .dot {
-  height: 15px; 
-  width: 15px;
-  border-radius: 50%; 
-  display: inline-block;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%; /* Make it circular */
+  display: inline-block;
 }
 
-#todo-dot { background-color: #49c4e5; }
-#doing-dot { background-color: #8471f2; }
-#done-dot { background-color: #219c90; }
+#todo-dot {
+  background-color: #49c4e5;
+}
+
+#doing-dot {
+  background-color: #8471f2;
+}
+
+#done-dot {
+  background-color: #219c90;
+}
 
 /* ===============
-   Task Cards
+   Task Cards
 ================ */
 .tasks-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .task-div {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; 
-  padding: 15px;
-  width: 100%;
-  height: auto;
-  background-color: var(--primary-color);
-  color: var(--primary-font-color);
-  border-radius: 8px;
-  box-shadow: var(--primary-box-shadow);
-  cursor: pointer; 
-  font-size: 0.9375rem;
-  font-weight: bold;
-  min-height: 60px;
-}
-
-.task-title {
-    max-width: 80%;
-}
-
-/* Priority Circle (Stretch Goal) */
-.priority-circle {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-
-.priority-high { background-color: var(--priority-high); }
-.priority-medium { background-color: var(--priority-medium); }
-.priority-low { background-color: var(--priority-low); }
-
-/* ===============
-   Modal Styles (P2.1, P2.14)
-================ */
-#custom-backdrop {
-  display: none; 
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5); /* Figma: #000000 @ 50% opacity */
-  z-index: 999; 
-}
-
-#custom-backdrop.show {
-  display: block;
-}
-
-/* Base Modal Styling */
-#new-task-modal,
-#task-modal {
-  border-radius: 8px;
-  width: 479px; 
-  max-width: 90vw;
-  padding: 24px;
-  background-color: var(--primary-color);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* Used to control visibility with JS */
-  display: none; 
-}
-
-/* For the New Task Modal, explicitly control display with JS class */
-#new-task-modal.show {
-    display: block;
-    top: 267px; /* Figma: top 267px for desktop */
-    transform: translateX(-50%);
-}
-
-#task-modal[open] {
-    display: block;
-}
-
-/* Modal Headers */
-.modal-header, .new-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
-.modal-header h3, .new-modal-header h3 {
-    color: var(--primary-font-color);
-    font-size: 1.125rem; /* 18px */
-    font-weight: 700;
-}
-
-.close-btn, .new-close-btn, .mobile-close-btn {
-    background: transparent;
-    border: none;
-    font-size: 1.5rem;
-    color: var(--main-red); /* Figma: #EA5555 */
-    cursor: pointer;
-    line-height: 1;
-}
-
-/* Form Elements (P2.1) */
-#new-task-form label,
-#task-form label {
-  display: block;
-  margin-top: 24px;
-  margin-bottom: 8px;
-  font-weight: 700;
-  font-size: 0.75rem; 
-  color: var(--secondary-font-color);
-  letter-spacing: 2.4px; 
-}
-
-#new-task-form input,
-#new-task-form textarea,
-#new-task-form select,
-#task-form input,
-#task-form textarea,
-#task-form select {
-  width: 100%; 
-  border: 1px solid rgba(130, 143, 163, 0.25); 
-  padding: 8px 16px;
-  font-size: 0.8125rem; 
-  color: var(--primary-font-color);
-  background-color: var(--primary-color);
-  border-radius: 4px;
-}
-
-#new-task-form textarea,
-#task-form textarea {
-    resize: none;
-}
-
-#new-task-form input::placeholder,
-#task-form input::placeholder {
-  color: rgba(0, 1, 18, 0.25); 
-  opacity: 1;
-}
-
-/* Create Task Button (P2.1) */
-.create-task-btn {
-  background-color: var(--main-purple);
-  color: #ffffff;
-  font-weight: 700;
-  font-size: 0.9375rem; 
-  width: 100%;
-  height: 40px;
-  border-radius: 20px; 
-  margin-top: 24px;
-  border: none;
-  cursor: pointer;
-}
-
-/* Edit Modal Buttons (P2.18) */
-.task-btns {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 30px;
-  gap: 10px; 
-}
-
-.save-changes-btn,
-.delete-task-btn {
-  width: 48%; 
-  height: 40px;
-  border-radius: 20px;
-  font-weight: 700;
-  color: #ffffff;
-  border: none;
-  cursor: pointer;
-}
-
-.save-changes-btn {
-  background-color: var(--main-purple);
-}
-
-.delete-task-btn {
-  background-color: var(--main-red);
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  width: 100%;
+  height: 60px;
+  background-color: var(--primary-color);
+  color: var(--primary-font-color);
+  border-radius: 12px;
+  box-shadow: var(--primary-box-shadow);
+  cursor: pointer; /* Indicate it's clickable */
+  margin-bottom: 20px;
+  font-size: 0.9375rem;
+  font-weight: bold;
 }
 
 /* ===============
-   Mobile Menu Modal (P2.25)
+   Headings
 ================ */
-#mobile-menu-modal {
-    width: 264px; 
-    max-width: 80vw;
-    height: auto;
-    background-color: var(--primary-color);
-    border: none;
-    border-radius: 8px;
-    padding: 16px;
-    position: fixed;
-    top: 65px; 
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    z-index: 1001; 
-}
-
-.mobile-menu-content {
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-}
-
-#headline-mobile-menu {
-    padding-left: 12px;
-    margin-bottom: 19px;
-}
-
-.mobile-board-btn {
-    width: 100%;
-    padding-left: 12px;
-    border-radius: 0;
-    margin-bottom: 10px;
-}
-
-.mobile-theme-toggle {
-    margin-top: 20px;
+h2 {
+  font-size: 1.5rem;
+  margin: 0;
 }
 
 /* ========================
-   Responsive Styles
+   Responsive Styles
 ======================== */
 
-/* Mobile */
+/******** Tablets ********/
+@media screen and (max-width: 1023px) {
+  .side-bar {
+    display: none; /* Hide sidebar on tablets and smaller */
+  }
+
+  .side-bar.show-sidebar {
+    display: flex !important;
+    position: fixed; /* Overlay on top of page */
+    height: auto;
+  }
+
+  #side-logo-div {
+    display: none;
+  }
+
+  .logo-mobile {
+    display: block;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  body {
+    font-size: 0.8rem;
+  }
+
+  .board-btn {
+    font-size: 0.8rem;
+    padding-left: 15px;
+    margin-right: 15px;
+    font-weight: 700;
+  }
+
+  .container {
+    padding: 0;
+    width: 100%;
+    align-items: center; /* Center columns on smaller screens */
+  }
+
+  .card-column-main {
+    grid-template-columns: repeat(2, minmax(0, 360px));
+    gap: 8px;
+  }
+
+  header {
+    height: 64px;
+    padding: 0 10px 0 18px;
+    border: none;
+  }
+
+  #header-board-name {
+    font-size: 1rem;
+  }
+
+  .task-div {
+    width: 100%;
+  }
+
+  .columnHeader {
+    font-size: 0.75rem;
+  }
+
+  .dot {
+    height: 8px;
+    width: 8px;
+  }
+
+  .column-head-div {
+    gap: 8px;
+  }
+
+  .column-div {
+    width: 100%;
+  }
+}
+
+/******** Mobile ********/
 @media screen and (max-width: 576px) {
-    
-    /* Mobile Add Task Button (P2.1) */
-    #add-task-btn span {
-        display: none; 
-    }
-    #add-task-btn {
-        width: 33px; 
-        height: 33px; 
-        border-radius: 50%;
-        margin-right: 16px;
-        font-size: 1.5rem; 
-    }
-    
-    .logo-mobile {
-        display: block;
-        width: 24px; 
-        height: 24px;
-        margin-right: 16px;
-        cursor: pointer;
-    }
+  .card-column-main {
+    grid-template-columns: minmax(
+      0,
+      380px
+    ); /* Stack columns in single column */
+  }
 
-    header {
-        height: 64px;
-        padding: 0 16px;
-    }
-
-    .header-board-name {
-        font-size: 1.125rem; 
-    }
-    
-    /* Mobile Column Layout */
-    .card-column-main {
-        flex-direction: row; 
-        overflow-x: scroll; 
-        min-width: 100%;
-        min-height: 80vh;
-    }
-
-    .container {
-        padding: 0 16px;
-    }
-
-    /* Mobile Task Modals (P2.1, P2.14) */
-    #task-modal,
-    #new-task-modal {
-        width: 343px; 
-        top: 102px; 
-        left: 50%;
-        transform: translateX(-50%);
-        height: auto;
-    }
-    
-    /* Mobile Edit Modal Buttons */
-    .task-btns {
-        flex-direction: column; 
-        gap: 10px;
-    }
-
-    .save-changes-btn,
-    .delete-task-btn {
-        width: 100%;
-    }
+  .column-div {
+    padding: 24px;
+  }
 }
