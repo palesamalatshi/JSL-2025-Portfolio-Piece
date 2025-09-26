@@ -1,75 +1,78 @@
+// scripts/tasks/taskManager.js
+
 import {
-  readTasksFromStorage,
-  saveTasksToStorage,
-  loadInitialIfMissing,
+  loadTasksFromStorage,
+  saveTasksToStorage,
 } from "../utils/localStorage.js";
-import { clearExistingTasks, renderTasks, updateCounts } from "../ui/render.js";
-import { resetNewTaskForm } from "./formUtils.js";
+import { clearExistingTasks, renderTasks } from "../ui/render.js";
+import { resetForm } from "./formUtils.js";
 
 /**
- * Add new task from new-task form inputs
+ * Creates a new task object, saves it to storage, and updates the UI (P2.12).
+ * @param {HTMLElement} modal - The new task modal element to close.
  */
-export function addNewTaskFromForm() {
-  const title = document.getElementById("new-task-title").value.trim();
-  const description = document.getElementById("new-task-desc").value.trim();
-  const status = document.getElementById("new-task-status").value;
+export function addNewTask(modal) {
+  const title = document.getElementById("new-task-title").value.trim();
+  const description = document.getElementById("new-task-desc").value.trim();
+  const status = document.getElementById("new-task-status").value;
+  const priority = document.getElementById("new-task-priority").value; // Stretch Goal
 
-  if (!title) return;
+  if (!title) return;
 
-  const tasks = readTasksFromStorage() ?? loadInitialIfMissing();
-  const newId = tasks.length ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
-  const newTask = { id: newId, title, description, status, board: "Launch Career" };
+  const tasks = loadTasksFromStorage();
+  const newId = tasks.length ? Math.max(...tasks.map((t) => t.id)) + 1 : 1;
+  
+  const newTask = {
+    id: newId,
+    title,
+    description,
+    status,
+    priority, // Stretch Goal included
+    board: "Launch Career", 
+  };
 
-  const updated = [...tasks, newTask];
-  saveTasksToStorage(updated);
+  const updatedTasks = [...tasks, newTask];
+  saveTasksToStorage(updatedTasks);
 
-  // re-render
-  clearExistingTasks();
-  renderTasks(updated);
-  updateCounts(updated);
-
-  // reset & close
-  resetNewTaskForm();
+  clearExistingTasks();
+  renderTasks(updatedTasks);
+  
+  resetForm();
+  modal.classList.remove("show"); 
+  document.getElementById("custom-backdrop").classList.remove("show");
 }
 
 /**
- * Save changes to an existing task (edit modal)
+ * Updates an existing task's details and persists changes to local storage (P2.15, P2.16).
+ * @param {number} taskId - The ID of the task to update.
+ * @param {Object} updatedData - The form data containing new title, description, status, and priority.
  */
-export function saveTaskChanges(taskId) {
-  const title = document.getElementById("task-title").value.trim();
-  const description = document.getElementById("task-desc").value.trim();
-  const status = document.getElementById("task-status").value;
+export function updateTask(taskId, updatedData) {
+    const tasks = loadTasksFromStorage();
+    const taskIndex = tasks.findIndex(t => t.id == taskId);
 
-  const tasks = readTasksFromStorage() ?? loadInitialIfMissing();
-  const idx = tasks.findIndex((t) => t.id === taskId);
-  if (idx === -1) return;
+    if (taskIndex !== -1) {
+        tasks[taskIndex] = { ...tasks[taskIndex], ...updatedData };
+        saveTasksToStorage(tasks); 
 
-  tasks[idx].title = title;
-  tasks[idx].description = description;
-  tasks[idx].status = status;
-
-  saveTasksToStorage(tasks);
-  clearExistingTasks();
-  renderTasks(tasks);
-  updateCounts(tasks);
+        // P2.17: Re-render the board to move the task card if status changed
+        clearExistingTasks();
+        renderTasks(tasks);
+    }
 }
 
 /**
- * Delete a task by id
+ * Deletes a task by ID from storage and the UI (P2.20).
+ * @param {number} taskId - The ID of the task to delete.
  */
-export function deleteTaskById(taskId) {
-  const tasks = readTasksFromStorage() ?? loadInitialIfMissing();
-  const filtered = tasks.filter((t) => t.id !== taskId);
-  saveTasksToStorage(filtered);
-  clearExistingTasks();
-  renderTasks(filtered);
-  updateCounts(filtered);
-}
+export function deleteTask(taskId) {
+    let tasks = loadTasksFromStorage();
+    
+    const updatedTasks = tasks.filter(t => t.id != taskId);
 
-/**
- * Utility to get a task by id (returns copy)
- */
-export function getTaskById(id) {
-  const tasks = readTasksFromStorage() ?? loadInitialIfMissing();
-  return tasks.find((t) => t.id === id) ?? null;
+    saveTasksToStorage(updatedTasks);
+
+    // P2.20: Re-render the entire board to remove the task
+    clearExistingTasks();
+    renderTasks(updatedTasks);
 }

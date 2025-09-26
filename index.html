@@ -1,152 +1,198 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap"
       rel="stylesheet"
     />
+
     <link rel="stylesheet" href="./styles.css" />
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon.svg" />
-    <script type="module" src="./scripts/main.js" defer></script>
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./assets/favicon.svg"
+    />
+    <script defer src="./main.js" type="module"></script>
     <title>Kanban Task Management</title>
   </head>
 
   <body>
-    <!-- Sidebar -->
-    <nav class="side-bar" id="side-bar-div" aria-label="Sidebar">
+    <nav class="side-bar" id="side-bar-div">
       <div id="side-logo-div">
-        <img id="logo" src="./assets/logo-light.svg" alt="Kanban logo" />
+        <img id="logo" src="./assets/logo-light.svg" alt="kanban logo" />
       </div>
 
       <div class="boards-nav-links-div" id="boards-nav-links-div">
         <h4 id="headline-sidepanel">ALL BOARDS (1)</h4>
-        <button class="board-btn">Launch Career</button>
+        <button class="board-btn active">Launch Career</button>
+      </div>
 
-        <div class="sidebar-controls">
-          <div class="theme-row">
-            <span class="theme-label">Light</span>
-            <label class="theme-switch" title="Toggle theme" aria-label="Theme toggle">
-              <input type="checkbox" id="theme-toggle" />
-              <span class="slider"></span>
-            </label>
-            <span class="theme-label">Dark</span>
+      <div class="theme-toggle-container">
+        <div class="theme-toggle-box">
+          <span>🌞</span>
+          <div class="toggle-switch" id="theme-toggle-switch">
+            <div class="toggle-slider"></div>
           </div>
-
-          <button id="hide-sidebar-btn" class="secondary-btn">Hide Sidebar</button>
+          <span>🌚</span>
         </div>
       </div>
+      
+      <button class="hide-sidebar-btn" id="hide-sidebar-btn">
+        🚫 Hide Sidebar
+      </button>
     </nav>
 
-    <!-- Hamburger for mobile -->
-    <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Open menu">
-      ☰
-    </button>
-
-    <!-- Main layout -->
     <div id="layout">
       <header id="header" class="sticky-header">
         <div class="header-name-div">
-          <img src="./assets/favicon.svg" alt="logo-mobile" class="logo-mobile" />
-          <h2 class="header-board-name" id="header-board-name">Launch Career</h2>
+          <img
+            src="./assets/favicon.svg"
+            alt="logo-mobile"
+            class="logo-mobile"
+            id="mobile-menu-toggle-btn" 
+          />
+          <h2 class="header-board-name" id="header-board-name">
+            Launch Career
+          </h2>
         </div>
-        <div class="header-controls">
-          <button id="add-task-btn" class="primary-btn" aria-haspopup="dialog">
-            + <span>Add New task</span>
-          </button>
-        </div>
+        <button id="add-task-btn">
+            +<span> Add New Task</span>
+        </button>
       </header>
 
       <div class="container">
-        <!-- Loading & error area -->
-        <div id="status-area" class="status-area" aria-live="polite"></div>
-
-        <main class="card-column-main" id="board-columns">
+        <main class="card-column-main">
           <div class="column-div" data-status="todo">
-            <div class="column-head-div">
+            <div id="todo-head-div" class="column-head-div">
               <span class="dot" id="todo-dot"></span>
-              <h4 class="columnHeader">TODO (<span id="todo-count">0</span>)</h4>
+              <h4 id="toDoText" class="columnHeader">TODO (0)</h4>
             </div>
-            <div class="tasks-container" id="todo-container"></div>
+            <div class="tasks-container"></div>
           </div>
-
           <div class="column-div" data-status="doing">
-            <div class="column-head-div">
+            <div id="doing-head-div" class="column-head-div">
               <span class="dot" id="doing-dot"></span>
-              <h4 class="columnHeader">DOING (<span id="doing-count">0</span>)</h4>
+              <h4 id="doingText" class="columnHeader">DOING (0)</h4>
             </div>
-            <div class="tasks-container" id="doing-container"></div>
+            <div class="tasks-container"></div>
           </div>
-
           <div class="column-div" data-status="done">
-            <div class="column-head-div">
+            <div id="done-head-div" class="column-head-div">
               <span class="dot" id="done-dot"></span>
-              <h4 class="columnHeader">DONE (<span id="done-count">0</span>)</h4>
+              <h4 id="doneText" class="columnHeader">DONE (0)</h4>
             </div>
-            <div class="tasks-container" id="done-container"></div>
+            <div class="tasks-container"></div>
           </div>
         </main>
       </div>
+      
+      <button class="show-sidebar-btn" id="show-sidebar-btn">
+        👀
+      </button>
     </div>
 
-    <!-- Edit Task Modal -->
     <dialog id="task-modal">
       <form method="dialog" id="task-form">
         <div class="modal-header">
-          <h3>Task</h3>
-          <button type="button" class="close-btn" id="close-modal-btn" aria-label="Close">&times;</button>
+          <h3>Task Title Placeholder</h3>
+          <button type="button" class="close-btn" id="close-modal-btn">
+            &times;
+          </button>
         </div>
 
-        <label for="task-title">Title</label>
+        <label for="task-title">TITLE</label>
         <input type="text" id="task-title" name="title" required />
 
-        <label for="task-desc">Description</label>
+        <label for="task-desc">DESCRIPTION</label>
         <textarea id="task-desc" name="description" rows="4"></textarea>
 
-        <label for="task-status">Status</label>
+        <label for="task-priority">PRIORITY</label>
+        <select id="task-priority" name="priority" required>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+
+        <label for="task-status">STATUS</label>
         <select id="task-status" name="status" required>
-          <option value="todo">todo</option>
-          <option value="doing">doing</option>
-          <option value="done">done</option>
+          <option value="todo">Todo</option>
+          <option value="doing">Doing</option>
+          <option value="done">Done</option>
         </select>
 
         <div class="task-btns">
-          <button id="save-changes-btn" type="button" class="save-changes-btn">Save Changes</button>
-          <button id="delete-task-btn" type="button" class="delete-task-btn">Delete Task</button>
+          <button id="save-changes-btn" class="save-changes-btn" type="button">
+            Save Changes
+          </button>
+          <button id="delete-task-btn" class="delete-task-btn" type="button">
+            Delete Task
+          </button>
         </div>
       </form>
     </dialog>
+    
+    <dialog id="new-task-modal">
+      <form method="dialog" id="new-task-form">
+        <div class="new-modal-header">
+          <h3>Add New Task</h3>
+          <button type="button" class="new-close-btn" id="new-close-modal-btn">
+            &times;
+          </button>
+        </div>
 
-    <!-- New Task Modal (custom overlay for broader browser compatibility) -->
-    <div id="new-task-overlay" class="modal-overlay" hidden>
-      <div id="new-task-modal" role="dialog" aria-modal="true">
-        <form id="new-task-form">
-          <div class="new-modal-header">
-            <h3>Add new Task</h3>
-            <button type="button" class="new-close-btn" id="new-close-modal-btn" aria-label="Close">&times;</button>
-          </div>
+        <label for="new-task-title">TITLE</label>
+        <input type="text" id="new-task-title" name="title" required placeholder="e.g. Take chilled break"/>
 
-          <label for="new-task-title">Title</label>
-          <input type="text" id="new-task-title" name="title" required />
+        <label for="new-task-desc">DESCRIPTION</label>
+        <textarea id="new-task-desc" name="description" rows="4" placeholder="e.g. Pet your dog, have a cup of coffee..."></textarea>
+        
+        <label for="new-task-priority">PRIORITY</label>
+        <select id="new-task-priority" name="priority" required>
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
 
-          <label for="new-task-desc">Description</label>
-          <textarea id="new-task-desc" name="description" rows="4"></textarea>
+        <label for="new-task-status">STATUS</label>
+        <select id="new-task-status" name="status" required>
+          <option value="todo">Todo</option>
+          <option value="doing">Doing</option>
+          <option value="done">Done</option>
+        </select>
 
-          <label for="new-task-status">Status</label>
-          <select id="new-task-status" name="status" required>
-            <option value="todo">todo</option>
-            <option value="doing">doing</option>
-            <option value="done">done</option>
-          </select>
+        <div class="new-task-btns">
+          <button class="create-task-btn" type="submit">
+            Create Task
+          </button>
+        </div>
+      </form>
+    </dialog>
+    
+    <div id="custom-backdrop"></div>
+    
+    <dialog id="mobile-menu-modal" class="mobile-menu-modal">
+        <div class="mobile-menu-content">
+            <button type="button" class="mobile-close-btn" id="mobile-close-btn">
+                &times;
+            </button>
+            <h4 id="headline-mobile-menu">ALL BOARDS (3)</h4>
+            <button class="board-btn mobile-board-btn active">Launch Career</button>
+            <button class="board-btn mobile-board-btn">Marketing Plan</button>
+            <button class="board-btn mobile-board-btn">Roadmap</button>
 
-          <div class="new-task-btns">
-            <button type="submit" class="create-task-btn">Create Task</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <div id="custom-backdrop" hidden></div>
+            <div class="theme-toggle-container mobile-theme-toggle">
+                <div class="theme-toggle-box">
+                    <span>🌞</span>
+                    <div class="toggle-switch" id="mobile-theme-toggle-switch">
+                        <div class="toggle-slider"></div>
+                    </div>
+                    <span>🌚</span>
+                </div>
+            </div>
+        </div>
+    </dialog>
   </body>
 </html>
