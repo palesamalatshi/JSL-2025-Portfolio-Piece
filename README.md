@@ -6,8 +6,8 @@ A fully responsive Kanban task management web application that allows users to c
 
 ---
 
-- **Live Deployment Link:** [https://your-netlify-app-name.netlify.app/](https://your-netlify-app-name.netlify.app/)
-- **Presentation Video Link:** [Link to your 5-10 minute presentation video]
+- **Live Deployment Link:** [https://your-netlify-app-name.netlify.app/](https://https://palmal25525-jslpp.netlify.app/)
+- **Presentation Video Link:** [https://drive.google.com/file/d/1VhG_F9MNLuP7oE9UmzVL-9dAJRbwwVOk/view?usp=drive_link]
 
 ---
 
