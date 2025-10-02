@@ -1,58 +1,52 @@
-const tasksKey = "kanbanTasks";
-
-const todoContainer = document.querySelector('.column-div[data-status="todo"] .tasks-container');
-const doingContainer = document.querySelector('.column-div[data-status="doing"] .tasks-container');
-const doneContainer = document.querySelector('.column-div[data-status="done"] .tasks-container');
-
-const toDoCount = document.querySelector('#toDoText');
-const doingCount = document.querySelector('#doingText');
-const doneCount = document.querySelector('#doneText');
-
+// --- DOM ELEMENT REFERENCES ---
+const tasksContainer = document.querySelector(".card-column-main");
+const todoContainer = document.querySelector(
+  '.column-div[data-status="todo"] .tasks-container'
+);
+const doingContainer = document.querySelector(
+  '.column-div[data-status="doing"] .tasks-container'
+);
+const doneContainer = document.querySelector(
+  '.column-div[data-status="done"] .tasks-container'
+);
+const toDoCountEl = document.querySelector("#toDoText");
+const doingCountEl = document.querySelector("#doingText");
+const doneCountEl = document.querySelector("#doneText");
 const addNewTaskBtn = document.getElementById("add-new-task-btn");
 const newTaskModal = document.getElementById("new-task-modal");
 const newTaskForm = document.getElementById("new-task-form");
 const closeNewTaskBtn = document.getElementById("close-new-task-btn");
-
 const editTaskModal = document.getElementById("edit-task-modal");
 const editTaskForm = document.getElementById("edit-task-form");
 const closeEditTaskBtn = document.getElementById("close-edit-task-btn");
 const deleteTaskBtn = document.getElementById("delete-task-btn");
-
 const themeToggle = document.getElementById("theme-toggle");
-
 const sidebar = document.getElementById("side-bar-div");
 const hideSidebarBtn = document.getElementById("hide-sidebar-btn");
+const showSidebarBtn = document.getElementById("show-sidebar-btn");
 
+// --- STATE MANAGEMENT ---
 let tasks = [];
 let currentEditTaskId = null;
 
+/**
+ * Saves the current tasks array to local storage.
+ */
 function saveTasks() {
-  localStorage.setItem(tasksKey, JSON.stringify(tasks));
+  localStorage.setItem("kanbanTasks", JSON.stringify(tasks));
 }
 
-function loadTasks() {
-  const saved = localStorage.getItem(tasksKey);
-  if (saved) {
-    tasks = JSON.parse(saved);
-  } else {
-    tasks = [
-      { id: generateId(), title: "Launch Epic Career 🚀", description: "", status: "todo", priority: "medium" },
-      { id: generateId(), title: "Conquer React⚛️", description: "", status: "todo", priority: "medium" },
-      { id: generateId(), title: "Understand Databases⚙️", description: "", status: "todo", priority: "medium" },
-      { id: generateId(), title: "Crush Frameworks🖼️", description: "", status: "todo", priority: "medium" },
-      { id: generateId(), title: "Master JavaScript 💛", description: "", status: "doing", priority: "medium" },
-      { id: generateId(), title: "Never Give Up 🏆", description: "", status: "doing", priority: "medium" },
-      { id: generateId(), title: "Explore ES6 Features 🚀", description: "", status: "done", priority: "medium" },
-      { id: generateId(), title: "Have fun 🥳", description: "", status: "done", priority: "medium" }
-    ];
-    saveTasks();
-  }
-}
-
+/**
+ * Generates a simple unique ID.
+ * @returns {string} A unique ID string.
+ */
 function generateId() {
-  return '_' + Math.random().toString(36).substr(2, 9);
+  return "_" + Math.random().toString(36).substr(2, 9);
 }
 
+/**
+ * Renders all tasks to the correct columns on the board.
+ */
 function renderTasks() {
   todoContainer.innerHTML = "";
   doingContainer.innerHTML = "";
@@ -60,94 +54,128 @@ function renderTasks() {
 
   const priorityOrder = { high: 1, medium: 2, low: 3 };
 
-  ["todo", "doing", "done"].forEach(status => {
-    const container = getContainerByStatus(status);
-    const filteredTasks = tasks
-      .filter(t => t.status === status)
+  ["todo", "doing", "done"].forEach((status) => {
+    const container =
+      status === "todo"
+        ? todoContainer
+        : status === "doing"
+        ? doingContainer
+        : doneContainer;
+
+    const filteredAndSorted = tasks
+      .filter((t) => t.status === status)
       .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-    filteredTasks.forEach(task => {
+
+    filteredAndSorted.forEach((task) => {
       const div = document.createElement("div");
       div.className = "task-div";
       div.dataset.id = task.id;
 
-      let titleSpan = document.createElement("span");
+      const titleSpan = document.createElement("span");
       titleSpan.className = "task-title";
       titleSpan.textContent = task.title;
       div.appendChild(titleSpan);
 
-      let priorityCircle = document.createElement("span");
+      const priorityCircle = document.createElement("span");
       priorityCircle.className = `priority-circle priority-${task.priority}`;
       div.appendChild(priorityCircle);
 
       div.addEventListener("click", () => openEditModal(task.id));
-
       container.appendChild(div);
     });
-    updateCount(status, filteredTasks.length);
+
+    updateCounts();
   });
 }
 
-function getContainerByStatus(status) {
-  if (status === "todo") return todoContainer;
-  if (status === "doing") return doingContainer;
-  if (status === "done") return doneContainer;
+/**
+ * Updates the task counts in the column headers.
+ */
+function updateCounts() {
+  toDoCountEl.textContent = `TODO (${
+    tasks.filter((t) => t.status === "todo").length
+  })`;
+  doingCountEl.textContent = `DOING (${
+    tasks.filter((t) => t.status === "doing").length
+  })`;
+  doneCountEl.textContent = `DONE (${
+    tasks.filter((t) => t.status === "done").length
+  })`;
 }
 
-function updateCount(status, count) {
-  if (status === "todo") toDoCount.textContent = `TODO (${count})`;
-  if (status === "doing") doingCount.textContent = `DOING (${count})`;
-  if (status === "done") doneCount.textContent = `DONE (${count})`;
+/**
+ * Fetches initial tasks from an API.
+ * @returns {Promise<Array>} A promise that resolves with the tasks array.
+ */
+async function fetchInitialTasks() {
+  try {
+    const response = await fetch(
+      "https://jsl-kanban-api.vercel.app/api/tasks"
+    );
+    if (!response.ok) throw new Error("Network response was not ok.");
+    const apiTasks = await response.json();
+    // API tasks might not have IDs, so we add them
+    return apiTasks.map((task) => ({ ...task, id: generateId() }));
+  } catch (error) {
+    console.error("Failed to fetch tasks from API:", error);
+    // Return a default set of tasks if the API fails
+    return [
+      {
+        id: generateId(),
+        title: "API fetch failed - default task",
+        description: "Check the console for errors.",
+        status: "todo",
+        priority: "high",
+      },
+    ];
+  }
 }
 
-addNewTaskBtn.addEventListener("click", () => {
-  newTaskForm.reset();
-  newTaskModal.showModal();
-  disablePageInteraction(true);
-});
-
-closeNewTaskBtn.addEventListener("click", () => {
-  newTaskModal.close();
-  disablePageInteraction(false);
-});
-
-newTaskForm.addEventListener("submit", e => {
-  e.preventDefault();
-  const newTask = {
-    id: generateId(),
-    title: newTaskForm["new-task-title"].value.trim(),
-    description: newTaskForm["new-task-desc"].value.trim(),
-    status: newTaskForm["new-task-status"].value,
-    priority: newTaskForm["new-task-priority"].value
-  };
-  if (!newTask.title) return alert("Title is required.");
-  tasks.push(newTask);
-  saveTasks();
-  renderTasks();
-  newTaskModal.close();
-  disablePageInteraction(false);
-});
-
+/**
+ * Opens the edit modal and populates it with task data.
+ * @param {string} taskId - The ID of the task to edit.
+ */
 function openEditModal(taskId) {
   currentEditTaskId = taskId;
-  const task = tasks.find(t => t.id === taskId);
+  const task = tasks.find((t) => t.id === taskId);
   if (!task) return;
   editTaskForm["edit-task-title"].value = task.title;
   editTaskForm["edit-task-desc"].value = task.description;
   editTaskForm["edit-task-status"].value = task.status;
   editTaskForm["edit-task-priority"].value = task.priority;
   editTaskModal.showModal();
-  disablePageInteraction(true);
 }
 
-closeEditTaskBtn.addEventListener("click", () => {
-  editTaskModal.close();
-  disablePageInteraction(false);
+// --- EVENT LISTENERS ---
+
+// Modal Event Listeners
+addNewTaskBtn.addEventListener("click", () => {
+  newTaskForm.reset();
+  newTaskModal.showModal();
+});
+closeNewTaskBtn.addEventListener("click", () => newTaskModal.close());
+closeEditTaskBtn.addEventListener("click", () => editTaskModal.close());
+
+// Form Submission Event Listeners
+newTaskForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const newTask = {
+    id: generateId(),
+    title: newTaskForm["new-task-title"].value.trim(),
+    description: newTaskForm["new-task-desc"].value.trim(),
+    status: newTaskForm["new-task-status"].value,
+    priority: newTaskForm["new-task-priority"].value,
+  };
+  if (!newTask.title) return alert("Title is required.");
+  tasks.push(newTask);
+  saveTasks();
+  renderTasks();
+  newTaskModal.close();
 });
 
-editTaskForm.addEventListener("submit", e => {
+editTaskForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  if (!currentEditTaskId) return;
-  const task = tasks.find(t => t.id === currentEditTaskId);
+  const task = tasks.find((t) => t.id === currentEditTaskId);
   if (!task) return;
   task.title = editTaskForm["edit-task-title"].value.trim();
   task.description = editTaskForm["edit-task-desc"].value.trim();
@@ -157,68 +185,55 @@ editTaskForm.addEventListener("submit", e => {
   saveTasks();
   renderTasks();
   editTaskModal.close();
-  disablePageInteraction(false);
 });
 
 deleteTaskBtn.addEventListener("click", () => {
   if (!currentEditTaskId) return;
   if (confirm("Are you sure you want to delete this task?")) {
-    tasks = tasks.filter(t => t.id !== currentEditTaskId);
+    tasks = tasks.filter((t) => t.id !== currentEditTaskId);
     saveTasks();
     renderTasks();
     editTaskModal.close();
-    disablePageInteraction(false);
   }
 });
 
+// UI Feature Event Listeners
 hideSidebarBtn.addEventListener("click", () => {
   sidebar.style.display = "none";
-  showSidebarEye();
+  showSidebarBtn.style.display = "block";
+});
+showSidebarBtn.addEventListener("click", () => {
+  sidebar.style.display = "flex";
+  showSidebarBtn.style.display = "none";
 });
 
-function showSidebarEye() {
-  if (document.getElementById("sidebar-eye")) return;
-  const eyeBtn = document.createElement("button");
-  eyeBtn.id = "sidebar-eye";
-  eyeBtn.textContent = "👀";
-  eyeBtn.style.position = "fixed";
-  eyeBtn.style.bottom = "30px";
-  eyeBtn.style.left = "10px";
-  eyeBtn.style.width = "56px";
-  eyeBtn.style.height = "48px";
-  eyeBtn.style.backgroundColor = "#a8a4ff";
-  eyeBtn.style.borderRadius = "0 100px 100px 0";
-  eyeBtn.style.fontSize = "24px";
-  eyeBtn.style.cursor = "pointer";
-  eyeBtn.style.border = "none";
-  eyeBtn.style.zIndex = "100";
-  document.body.appendChild(eyeBtn);
-
-  eyeBtn.addEventListener("click", () => {
-    sidebar.style.display = "flex";
-    eyeBtn.remove();
-  });
-}
-
-function disablePageInteraction(disable) {
-  document.body.style.overflow = disable ? "hidden" : "auto";
-}
-
-themeToggle.addEventListener("change", e => {
+themeToggle.addEventListener("change", (e) => {
   if (e.target.checked) {
-    document.documentElement.style.setProperty("--primary-color", "#20212c");
-    document.documentElement.style.setProperty("--secondary-color", "#2c2e3e");
-    document.documentElement.style.setProperty("--primary-font-color", "#ffffff");
-    document.documentElement.style.setProperty("--secondary-font-color", "#a8a8c6");
+    document.body.classList.add("dark-mode");
+    localStorage.setItem("theme", "dark");
   } else {
-    document.documentElement.style.setProperty("--primary-color", "#ffffff");
-    document.documentElement.style.setProperty("--secondary-color", "#f4f7fd");
-    document.documentElement.style.setProperty("--primary-font-color", "#000000");
-    document.documentElement.style.setProperty("--secondary-font-color", "#828fa3");
+    document.body.classList.remove("dark-mode");
+    localStorage.setItem("theme", "light");
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadTasks();
+// --- INITIALIZATION ---
+document.addEventListener("DOMContentLoaded", async () => {
+  // Load theme first
+  if (localStorage.getItem("theme") === "dark") {
+    themeToggle.checked = true;
+    document.body.classList.add("dark-mode");
+  }
+
+  // Load tasks
+  const savedTasks = localStorage.getItem("kanbanTasks");
+  if (savedTasks) {
+    tasks = JSON.parse(savedTasks);
+  } else {
+    tasksContainer.innerHTML = "<p>Loading tasks from API...</p>";
+    tasks = await fetchInitialTasks();
+    saveTasks();
+  }
+
   renderTasks();
 });

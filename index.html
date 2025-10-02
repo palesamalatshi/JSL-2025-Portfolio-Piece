@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -17,7 +17,6 @@
     <script defer src="./scripts.js"></script>
     <title>Kanban Task Management</title>
   </head>
-
   <body>
     <nav class="side-bar" id="side-bar-div">
       <div id="side-logo-div">
@@ -31,14 +30,15 @@
         <span class="theme-icon">🌞</span>
         <label class="switch">
           <input type="checkbox" id="theme-toggle" />
-          <span class="slider round"></span>
+          <span class="slider"></span>
         </label>
         <span class="theme-icon">🌚</span>
       </div>
-      <button id="hide-sidebar-btn" class="board-btn" style="margin-top: auto;">
-        Hide Sidebar 🚫
+      <button id="hide-sidebar-btn" class="hide-sidebar-btn">
+        🚫 Hide Sidebar
       </button>
     </nav>
+    <button id="show-sidebar-btn" class="show-sidebar-btn">👀</button>
 
     <div id="layout">
       <header id="header" class="sticky-header">
@@ -54,28 +54,28 @@
           </h2>
         </div>
         <button id="add-new-task-btn" class="primary-btn">
-          + Add New Task
+          <span class="btn-text">+ Add New Task</span>
+          <span class="btn-icon">➕</span>
         </button>
       </header>
-
       <div class="container">
         <main class="card-column-main">
           <div class="column-div" data-status="todo">
-            <div id="todo-head-div" class="column-head-div">
+            <div class="column-head-div">
               <span class="dot" id="todo-dot"></span>
               <h4 id="toDoText" class="columnHeader">TODO (0)</h4>
             </div>
             <div class="tasks-container"></div>
           </div>
           <div class="column-div" data-status="doing">
-            <div id="doing-head-div" class="column-head-div">
+            <div class="column-head-div">
               <span class="dot" id="doing-dot"></span>
               <h4 id="doingText" class="columnHeader">DOING (0)</h4>
             </div>
             <div class="tasks-container"></div>
           </div>
           <div class="column-div" data-status="done">
-            <div id="done-head-div" class="column-head-div">
+            <div class="column-head-div">
               <span class="dot" id="done-dot"></span>
               <h4 id="doneText" class="columnHeader">DONE (0)</h4>
             </div>
@@ -84,8 +84,6 @@
         </main>
       </div>
     </div>
-
-    <!-- Add New Task Modal -->
     <dialog id="new-task-modal" class="modal-overlay">
       <form class="modal-window" id="new-task-form">
         <div class="modal-header">
@@ -94,7 +92,6 @@
             &times;
           </button>
         </div>
-
         <label for="new-task-title">Title</label>
         <input
           type="text"
@@ -102,34 +99,27 @@
           placeholder="e.g. Take a little break"
           required
         />
-
         <label for="new-task-desc">Description</label>
         <textarea
           id="new-task-desc"
           rows="4"
-          placeholder="e.g. Pet your dog, have a cup of coffee, dance to your favourite song and come back to conquer this challenge. 💪🏾"
-          required
+          placeholder="e.g. Pet your dog, have a cup of coffee..."
         ></textarea>
-
         <label for="new-task-status">Status</label>
         <select id="new-task-status" required>
-          <option value="todo">todo</option>
-          <option value="doing">doing</option>
-          <option value="done">done</option>
+          <option value="todo">Todo</option>
+          <option value="doing">Doing</option>
+          <option value="done">Done</option>
         </select>
-
         <label for="new-task-priority">Priority</label>
         <select id="new-task-priority" required>
-          <option value="low">Low</option>
-          <option value="medium" selected>Medium</option>
           <option value="high">High</option>
+          <option value="medium" selected>Medium</option>
+          <option value="low">Low</option>
         </select>
-
         <button type="submit" class="submit-btn">Create Task</button>
       </form>
     </dialog>
-
-    <!-- Edit Task Modal -->
     <dialog id="edit-task-modal" class="modal-overlay">
       <form class="modal-window" id="edit-task-form">
         <div class="modal-header">
@@ -138,27 +128,22 @@
             &times;
           </button>
         </div>
-
         <label for="edit-task-title">Title</label>
         <input type="text" id="edit-task-title" required />
-
         <label for="edit-task-desc">Description</label>
-        <textarea id="edit-task-desc" rows="4" required></textarea>
-
+        <textarea id="edit-task-desc" rows="4"></textarea>
         <label for="edit-task-status">Status</label>
         <select id="edit-task-status" required>
-          <option value="todo">todo</option>
-          <option value="doing">doing</option>
-          <option value="done">done</option>
+          <option value="todo">Todo</option>
+          <option value="doing">Doing</option>
+          <option value="done">Done</option>
         </select>
-
         <label for="edit-task-priority">Priority</label>
         <select id="edit-task-priority" required>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
           <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
         </select>
-
         <div class="button-group">
           <button type="submit" class="submit-btn" id="save-task-btn">
             Save Changes

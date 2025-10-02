@@ -1,93 +1,97 @@
-/* ========================
-    Global & Root Variables
-======================== */
+/* ================================
+   Global Styles & Variables
+================================ */
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 :root {
   --primary-color: #ffffff;
   --secondary-color: #f4f7fd;
-  --primary-font-color: #000000;
+  --primary-font-color: #000112;
   --secondary-font-color: #828fa3;
   --primary-btn-color: #635fc7;
   --primary-box-shadow: 0px 4px 6px rgba(54, 78, 126, 0.1015);
   --sidebar-width: 300px;
+  --card-bg: #ffffff;
+  --card-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  --border-color: #e4ebfa;
 }
 
-/* ================
-    Base Elements
-================ */
+/* ================================
+   Base Elements
+================================ */
 body {
-  font-family: "Plus Jakarta Sans", sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--primary-font-color);
   display: flex;
-  flex-direction: row;
   width: 100%;
   min-height: 100vh;
-  margin: 0;
-  background-color: var(--secondary-color);
-  font-size: 1rem;
 }
 
-/* Sidebar */
+/* ================================
+   Sidebar
+================================ */
 .side-bar {
   display: flex;
   flex-direction: column;
   background-color: var(--primary-color);
-  border-right: 1px solid #e4ebfa;
+  border-right: 1px solid var(--border-color);
   width: var(--sidebar-width);
   height: 100vh;
-  padding: 30px 25px 20px;
-  gap: 20px;
+  padding: 30px 0 20px 0;
+  flex-shrink: 0;
+  transition: margin-left 0.3s ease;
 }
 
+#side-logo-div {
+  padding-left: 25px;
+}
 #side-logo-div img {
   max-width: 152px;
   margin-bottom: 40px;
 }
 
 .boards-nav-links-div {
-  display: flex;
-  flex-direction: column;
-  color: var(--primary-font-color);
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 2.4px;
-  color: #828fa3;
+  color: var(--secondary-font-color);
   margin-bottom: 30px;
+  padding-left: 25px;
 }
 
 .board-btn {
-  font-family: inherit;
   background-color: var(--primary-btn-color);
   color: white;
   border: none;
   border-radius: 0 100px 100px 0;
   height: 48px;
-  padding-left: 35px;
+  padding-left: 25px;
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   width: 276px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
 }
 
-/* Theme toggle container */
 .theme-toggle-container {
-  margin-top: auto;
+  margin: auto 24px 20px 24px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 15px;
-  height: 48px;
+  justify-content: center;
+  gap: 24px;
+  padding: 14px;
   border-radius: 6px;
-  background-color: #f4f7fd;
+  background-color: var(--secondary-color);
 }
 
 .theme-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .switch {
@@ -96,13 +100,11 @@ body {
   width: 40px;
   height: 20px;
 }
-
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
-
 .slider {
   position: absolute;
   top: 0;
@@ -114,7 +116,6 @@ body {
   cursor: pointer;
   transition: 0.4s;
 }
-
 .slider::before {
   position: absolute;
   content: "";
@@ -126,21 +127,13 @@ body {
   border-radius: 50%;
   transition: 0.4s;
 }
-
-input:checked + .slider {
-  background-color: #635fc7;
-}
-
 input:checked + .slider::before {
   transform: translateX(20px);
 }
 
-/* Hide sidebar button */
-#hide-sidebar-btn {
-  margin-top: 20px;
-  background-color: #f4f7fd;
-  color: #635fc7;
-  border-radius: 0 100px 100px 0;
+.hide-sidebar-btn {
+  color: var(--secondary-font-color);
+  background: none;
   border: none;
   height: 48px;
   width: 276px;
@@ -149,169 +142,148 @@ input:checked + .slider::before {
   cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  gap: 10px;
+  padding-left: 25px;
+  border-radius: 0 100px 100px 0;
+}
+.hide-sidebar-btn:hover {
+  background-color: rgba(99, 95, 199, 0.1);
 }
 
-/* ===============
-    Main Layout
-================ */
+.show-sidebar-btn {
+  position: fixed;
+  bottom: 32px;
+  left: 0;
+  width: 56px;
+  height: 48px;
+  background-color: var(--primary-btn-color);
+  border: none;
+  border-radius: 0 100px 100px 0;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 100;
+  display: none; /* Hidden by default */
+}
+
+/* ================================
+   Main Layout & Header
+================================ */
 #layout {
-  flex: 1;
-  overflow-x: hidden;
-  width: 100%;
+  flex-grow: 1;
+  overflow-x: auto;
 }
-
-/* Header */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: var(--primary-color);
-  color: var(--primary-font-color);
   height: 96px;
   padding: 0 35px 0 30px;
-  border-bottom: 1px solid #e4ebfa;
-  width: 100%;
-  font-size: 1.875rem;
-  font-weight: 600;
-}
-
-.header-name-div {
-  display: flex;
-  align-items: center;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .logo-mobile {
   display: none;
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
 }
-
 .primary-btn {
   background-color: var(--primary-btn-color);
   color: white;
-  border-radius: 30px;
+  border-radius: 24px;
   border: 0;
-  font-size: 16px;
-  padding: 18px 35px;
-  font-weight: 600;
+  font-size: 15px;
+  padding: 15px 24px;
+  font-weight: 700;
   cursor: pointer;
 }
-
-/* Columns container */
-.container {
-  display: flex;
-  flex-direction: column;
-  padding-left: 35px;
-  box-sizing: border-box;
-  margin-top: 24px;
+.primary-btn .btn-icon {
+  display: none;
 }
 
+/* ================================
+   Kanban Board
+================================ */
+.container {
+  padding: 24px;
+}
 .card-column-main {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 304px));
-  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  min-width: 850px;
 }
-
-/* Column */
 .column-div {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 12px;
-  background-color: var(--primary-color);
-  border-radius: 10px;
-  box-shadow: var(--primary-box-shadow);
 }
-
 .column-head-div {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
-
 .columnHeader {
-  font-size: 0.75rem;
-  letter-spacing: 0.125rem;
+  font-size: 12px;
+  letter-spacing: 2.4px;
   color: var(--secondary-font-color);
-  margin: 0;
   font-weight: 700;
-  text-transform: uppercase;
 }
-
-/* Status dots */
 .dot {
   height: 15px;
   width: 15px;
   border-radius: 50%;
-  display: inline-block;
 }
-
 #todo-dot {
   background-color: #49c4e5;
 }
-
 #doing-dot {
   background-color: #8471f2;
 }
-
 #done-dot {
   background-color: #219c90;
 }
-
-/* Tasks container */
 .tasks-container {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
-
-/* Individual task card */
 .task-div {
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 15px;
-  height: 60px;
-  background-color: var(--secondary-color);
-  color: var(--primary-font-color);
-  border-radius: 12px;
-  box-shadow: var(--primary-box-shadow);
-  cursor: pointer;
-  font-size: 0.9375rem;
-  font-weight: bold;
-  margin-bottom: 16px;
 }
-
+.task-div:hover {
+  color: var(--primary-btn-color);
+}
 .task-title {
   flex-grow: 1;
-  padding-right: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* Priority colored circles */
 .priority-circle {
   width: 15px;
   height: 15px;
   border-radius: 50%;
-  margin-left: 10px;
+  flex-shrink: 0;
 }
-
 .priority-low {
-  background-color: #219890; /* green */
+  background: #4caf50;
 }
-
 .priority-medium {
-  background-color: #f2994a; /* orange */
+  background: #ff9800;
 }
-
 .priority-high {
-  background-color: #eb5757; /* red */
+  background: #ea5555;
 }
 
-/* Modal base */
+/* ================================
+   Dialog (Modal)
+================================ */
 dialog {
   position: fixed;
   top: 50%;
@@ -321,130 +293,127 @@ dialog {
   padding: 0;
   margin: 0;
   background: none;
-  z-index: 1000; /* ensure on top */
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  z-index: 1000;
 }
-
-/* Modal backdrop */
 dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4); /* gray overlay */
-  backdrop-filter: blur(2px); /* optional blur effect */
+  background: rgba(0, 0, 0, 0.5);
 }
-
-/* Modal window */
 .modal-window {
-  position: relative;
-  top: auto;  /* reset any offset */
-  left: auto;
-  transform: none;
   border-radius: 8px;
-  width: 90%;
+  width: 90vw;
   max-width: 480px;
-  padding: 24px;
+  padding: 32px;
   background-color: var(--primary-color);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  font-weight: 500;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
-
-/* Modal header */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
-
-.modal-header h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: var(--primary-font-color);
-}
-
 .close-btn {
   background: none;
   border: none;
-  font-size: 2.5rem;
-  color: #ea5555;
+  font-size: 2rem;
+  color: var(--secondary-font-color);
   cursor: pointer;
-  line-height: 1;
-  transition: transform 0.2s ease;
 }
-
-.close-btn:hover {
-  transform: scale(1.15);
-}
-
 label {
-  font-weight: 600;
-  font-size: 0.75rem;
-  color: #828fa3;
-  margin: 6px 0 4px 0;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--secondary-font-color);
+  margin: 12px 0 8px 0;
   display: block;
 }
-
 input[type="text"],
 textarea,
 select {
   width: 100%;
-  padding: 10px 12px;
-  font-size: 14px;
+  padding: 8px 16px;
+  font-size: 13px;
   border-radius: 4px;
-  border: 1px solid #828fa3;
-  font-family: inherit;
-  outline-offset: 2px;
+  border: 1px solid rgba(130, 143, 163, 0.25);
+  background-color: var(--primary-color);
+  color: var(--primary-font-color);
   resize: vertical;
 }
-
 textarea {
-  min-height: 90px;
+  min-height: 112px;
 }
-
-button.submit-btn {
+.submit-btn,
+.delete-btn {
+  width: 100%;
+  border-radius: 20px;
+  padding: 12px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  margin-top: 24px;
+}
+.submit-btn {
   background-color: var(--primary-btn-color);
   color: white;
-  border-radius: 30px;
-  padding: 14px 35px;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  margin-top: 10px;
 }
-
-button.delete-btn {
+.delete-btn {
   background-color: #ea5555;
   color: white;
-  border-radius: 30px;
-  padding: 14px 35px;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  border: none;
-  margin-top: 10px;
 }
-
 .button-group {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 16px;
 }
 
-/* Responsive */
-@media screen and (max-width: 768px) {
-  .card-column-main {
-    grid-template-columns: repeat(1, minmax(0, 100%));
+/* ================================
+   🌙 Dark Mode Theme
+================================ */
+body.dark-mode {
+  --primary-color: #2b2c37;
+  --secondary-color: #20212c;
+  --primary-font-color: #ffffff;
+  --secondary-font-color: #828fa3;
+  --card-bg: #2b2c37;
+  --card-shadow: 0px 4px 6px rgba(0, 0, 0, 0.25);
+  --border-color: #3e3f4e;
+}
+body.dark-mode .task-div,
+body.dark-mode .task-div:hover {
+  color: #ffffff; /* This is the key fix! */
+}
+body.dark-mode .board-btn {
+  background-color: var(--primary-btn-color);
+  color: white;
+}
+body.dark-mode .theme-toggle-container {
+  background-color: #20212c;
+}
+body.dark-mode .hide-sidebar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ================================
+   📱 Mobile Responsiveness
+================================ */
+@media (max-width: 768px) {
+  .side-bar {
+    display: none;
   }
   .logo-mobile {
     display: block;
   }
-  #add-new-task-btn {
-    font-size: 14px;
-    padding: 14px 20px;
+  .primary-btn {
+    padding: 10px;
+    width: 48px;
+    height: 48px;
   }
-  .side-bar {
-    display: none !important;
+  .primary-btn .btn-text {
+    display: none;
+  }
+  .primary-btn .btn-icon {
+    display: inline;
+  }
+  .card-column-main {
+    grid-template-columns: 1fr;
+    min-width: unset;
   }
 }
