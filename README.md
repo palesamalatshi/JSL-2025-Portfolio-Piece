@@ -6,9 +6,10 @@ A fully responsive Kanban task management web application that allows users to c
 
 ---
 
-- **Live Deployment Link:** [https://your-netlify-app-name.netlify.app/](https://https://palmal25525-jslpp.netlify.app/)
-- **Presentation Video Link:** [https://drive.google.com/file/d/1VhG_F9MNLuP7oE9UmzVL-9dAJRbwwVOk/view?usp=drive_link]
+- **Live Deployment Link:** [https://palesamalatshi.github.io/PALMAL25525_FT02506_Group-A_Palesa-Malatshi_JSLPP/]
+- **Presentation Video Link:** [https://drive.google.com/file/d/1pbmZVtuSJFd8-t7tKvs7cpSWO_8Vvi2P/view?usp=sharing]
 
+![alt text](image.png)
 ---
 
 ## Key Features

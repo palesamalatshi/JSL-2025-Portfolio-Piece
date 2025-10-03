@@ -172,6 +172,8 @@ input:checked + .slider::before {
   flex-grow: 1;
   overflow-x: auto;
 }
+
+/* Header container: keep header-name and button aligned */
 header {
   display: flex;
   align-items: center;
@@ -182,9 +184,33 @@ header {
   border-bottom: 1px solid var(--border-color);
 }
 
-.logo-mobile {
-  display: none;
+/* header-name-div holds logo + title; ensures they sit side-by-side */
+.header-name-div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1; /* take available space so button sits to the right */
+  min-width: 0; /* prevent children forcing overflow */
 }
+
+.logo-mobile {
+  display: none; /* shown only on mobile via media query */
+  width: 40px;
+  height: auto;
+  object-fit: contain;
+}
+
+.header-board-name,
+#header-board-name {
+  margin: 0;
+  font-size: 1.375rem; /* ~22px for desktop */
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Primary add button */
 .primary-btn {
   background-color: var(--primary-btn-color);
   color: white;
@@ -194,6 +220,9 @@ header {
   padding: 15px 24px;
   font-weight: 700;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 .primary-btn .btn-icon {
   display: none;
@@ -263,6 +292,7 @@ header {
 }
 .task-title {
   flex-grow: 1;
+  min-width: 0; /* allow truncation */
 }
 
 .priority-circle {
@@ -270,6 +300,7 @@ header {
   height: 15px;
   border-radius: 50%;
   flex-shrink: 0;
+  margin-left: 12px;
 }
 .priority-low {
   background: #4caf50;
@@ -378,7 +409,7 @@ body.dark-mode {
 }
 body.dark-mode .task-div,
 body.dark-mode .task-div:hover {
-  color: #ffffff; /* This is the key fix! */
+  color: #ffffff; /* ensures text is readable in dark mode */
 }
 body.dark-mode .board-btn {
   background-color: var(--primary-btn-color);
@@ -393,27 +424,95 @@ body.dark-mode .hide-sidebar-btn:hover {
 
 /* ================================
    📱 Mobile Responsiveness
+   (header logo + title side-by-side)
 ================================ */
 @media (max-width: 768px) {
+  /* hide big sidebar */
   .side-bar {
     display: none;
   }
+  /* show the mobile logo in the header; keep it small */
   .logo-mobile {
     display: block;
+    width: 28px;
+    height: auto;
+    margin-right: 8px;
   }
+
+  /* make the header slightly shorter on mobile */
+  header {
+    height: 64px;
+    padding: 0 16px;
+  }
+
+  /* ensure logo and board name sit side-by-side and don't wrap */
+  .header-name-div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .header-board-name,
+  #header-board-name {
+    font-size: 16px; /* smaller heading for mobile */
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* make add button an icon-only circular button */
   .primary-btn {
     padding: 10px;
     width: 48px;
     height: 48px;
+    border-radius: 50%;
+    justify-content: center;
   }
   .primary-btn .btn-text {
     display: none;
   }
   .primary-btn .btn-icon {
     display: inline;
+    font-size: 18px;
+    line-height: 0;
   }
+
+  /* columns stack vertically and fit mobile width */
   .card-column-main {
     grid-template-columns: 1fr;
     min-width: unset;
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  .modal-window {
+    padding: 20px;
+  }
+
+  .task-div {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* Extra small devices (narrow phones) */
+@media (max-width: 420px) {
+  .logo-mobile {
+    width: 24px;
+  }
+  .header-board-name,
+  #header-board-name {
+    font-size: 14px;
+  }
+  .primary-btn {
+    width: 44px;
+    height: 44px;
   }
 }
